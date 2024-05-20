@@ -92,6 +92,13 @@ Compilation is fairly straightforward. Go to the `src` folder and run `make`.
 cd src && make
 ```
 
+## Dependencies
+
+CX16-Othello makes use of [zsmkit](https://github.com/mooinglemur/zsmkit) which
+is an advanced music and sound effects engine for the Commander X16 and
+available under a MIT License. A static copy of this library is bundled in
+this repository and automatically embedded in the `.PRG` file.
+
 ## Assets
 
 * Part of the artwork (specifically the stones and the board) was purchased from
