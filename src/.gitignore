@@ -1,0 +1,6 @@
+*.DAT
+*.PRG
+*.ZSM
+*.o
+*.sym
+*.map
