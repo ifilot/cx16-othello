@@ -25,9 +25,12 @@
 #include <cx16.h>
 #include <cbm.h>
 #include <ascii_charmap.h>
+#include <time.h>
 
 #include "constants.h"
 #include "game.h"
+
+extern clock_t prevtick;
 
 /**
  * @brief Initialize screen
@@ -111,5 +114,11 @@ void build_board(uint8_t size, uint8_t offset_y, uint8_t offset_x);
  * 
  */
 void clear_foreground();
+
+/**
+ * @brief Update diagonal background scrolling
+ * 
+ */
+void update_background_diagonal();
 
 #endif // _VIDEO_H

@@ -20,6 +20,8 @@
 
 #include "video.h"
 
+clock_t prevtick;
+
 /**
  * @brief Initialize screen
  * 
@@ -39,6 +41,9 @@ void init_screen() {
     VERA.layer1.mapbase  = MAPBASE1 >> 9;
 
     VERA.display.video |= 0b00110000;   // enable both layers
+
+    // set time increment
+    prevtick = clock();
 }
 
 /**
@@ -286,5 +291,19 @@ void clear_foreground() {
             VERA.data0 = TILE_NONE;        // transparent tile
             VERA.data0 = PALETTEBYTE;      // palette offset data
         }
+    }
+}
+
+/**
+ * @brief Update diagonal background scrolling
+ * 
+ */
+void update_background_diagonal() {
+    clock_t curtick = clock();
+
+    if(((curtick - prevtick) * 1000 / CLOCKS_PER_SEC) > 50) {
+        prevtick = curtick;
+        VERA.layer0.hscroll = (VERA.layer0.hscroll - 1) % 16;
+        VERA.layer0.vscroll = (VERA.layer0.vscroll - 1) % 16;
     }
 }

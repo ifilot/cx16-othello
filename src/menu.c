@@ -114,6 +114,7 @@ void game_menu() {
 
         // update sound buffer
         sound_fill_buffers();
+        update_background_diagonal();
     }
 }
 

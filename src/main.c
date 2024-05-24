@@ -69,6 +69,9 @@ void main() {
 
             // update sound buffer
             sound_fill_buffers();
+
+            // diagonal background scrolling
+            update_background_diagonal();
         }
     }
 }

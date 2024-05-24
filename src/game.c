@@ -438,6 +438,7 @@ void computer_turn() {
         // add artificial delay
         do {
             next = clock();
+            update_background_diagonal();
         }
         while (((next - start) * 1000 / CLOCKS_PER_SEC) < 500);
 
