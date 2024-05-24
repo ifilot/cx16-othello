@@ -28,7 +28,7 @@ void game_menu() {
     static unsigned char keycode;
 
     write_string("CX16-OTHELLO", 0, 1);
-    write_string("RC1", 0, 17);
+    write_string("1.1.0", 0, 15);
 
     write_string("(1) PLAYER 1:", 2, 1);
     write_string("(2) PLAYER 2:", 3, 1);

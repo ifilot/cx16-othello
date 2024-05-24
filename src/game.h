@@ -26,6 +26,7 @@
 #include <string.h>
 #include <ascii_charmap.h>
 #include <stdio.h>
+#include <time.h>
 
 #include "constants.h"
 #include "video.h"

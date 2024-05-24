@@ -404,6 +404,10 @@ void computer_turn() {
     uint8_t bestvalue = 0;
     uint8_t i=0, j=0;
     unsigned char keycode = 0;
+    clock_t start, next;
+
+    // keep track of time
+    start = clock();
 
     for(j=0; j<boardsize; j++) {
         for(i=0; i<boardsize; i++) {
@@ -431,6 +435,12 @@ void computer_turn() {
     }
 
     if(bestvalue != 0x00) {
+        // add artificial delay
+        do {
+            next = clock();
+        }
+        while (((next - start) * 1000 / CLOCKS_PER_SEC) < 500);
+
         place_stone(besty, bestx, PROBE_NO, current_player);
         no_move_counter = 0;
     } else {
