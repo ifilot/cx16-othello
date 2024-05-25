@@ -40,8 +40,8 @@ CHANNEL = 0
 ; Start the sound engine
 ;
 .proc _init_sound: near
-    jsr zsmkit::zsm_init_engine     ; initialize engine
-    jsr zsmkit::zsmkit_setisr
+   jsr zsmkit::zsm_init_engine     ; initialize engine
+   jsr zsmkit::zsmkit_setisr
 
    ; load background music
 	ldx #0			   ; priority

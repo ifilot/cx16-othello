@@ -18,64 +18,9 @@
  *                                                                        *
  **************************************************************************/
 
-#include <cx16.h>
-#include <stdint.h>
+#ifndef _MOUSE_H
+#define _MOUSE_H
 
-#include "video.h"
-#include "constants.h"
-#include "game.h"
-#include "menu.h"
-#include "mouse.h"
+void init_mouse();
 
-unsigned char keycode;
-
-void main() {
-    // load assets into memory
-    init_screen();
-    load_tiles();
-
-    // // enable mouse
-    init_mouse();
-
-    // load sound engine
-    init_sound();
-    start_bgmusic();
-
-    while(1) {
-        while(gamestate == GAME_MENU) {
-            clear_screen();
-            game_menu();
-        }
-
-        while(gamestate == GAME_RUN) {
-            switch(current_player) {
-                case PLAYER_ONE:
-                    switch(player1_type) {
-                        case PLAYER_HUMAN:
-                            human_turn();
-                        break;
-                        case PLAYER_CPU:
-                            computer_turn();
-                        break;
-                    }
-                break;
-                case PLAYER_TWO:
-                    switch(player2_type) {
-                        case PLAYER_HUMAN:
-                            human_turn();
-                        break;
-                        case PLAYER_CPU:
-                            computer_turn();
-                        break;
-                    }
-                break;
-            }
-
-            // update sound buffer
-            sound_fill_buffers();
-
-            // diagonal background scrolling
-            update_background_diagonal();
-        }
-    }
-}
+#endif // _MOUSE_H
