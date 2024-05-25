@@ -48,6 +48,7 @@ extern uint8_t boardsize;           // board size (6, 8 or 10)
 extern uint8_t board_offset_x;      // board x-offset with respect to screen
 extern uint8_t board_offset_y;      // board y-offset with respect to screen
 extern uint8_t no_move_counter;     // how many turns in a row no move can be made
+extern uint16_t cpu_waittime;       // time to wait until the computer makes a move
 
 /**
  * @brief Initialize the game scene

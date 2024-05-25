@@ -59,6 +59,10 @@
 #define TILE_BEDGB          0x08
 #define TILE_BEDGBR         0x09
 
+// sprites
+#define SPRITE_MOUSE_CURSOR 0x00
+#define SPRITE_TILE_CURSOR  0x65
+
 // stone colors
 #define STONE_RED           0x03
 #define STONE_TEAL          0x04

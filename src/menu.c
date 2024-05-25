@@ -152,11 +152,17 @@ void print_choice() {
     // build sample board
     build_board(4, 6, offsetx);
 
+    // set sprites
+    assign_sprite(1, stone_color1);
+    assign_sprite(2, stone_color2);
+    assign_sprite(3, stone_color1);
+    assign_sprite(4, stone_color2);
+
     // print stone colors
-    set_tile(7, offsetx+1, stone_color1, 0x00);
-    set_tile(7, offsetx+2, stone_color2, 0x00);
-    set_tile(8, offsetx+2, stone_color1, 0x00);
-    set_tile(8, offsetx+1, stone_color2, 0x00);
+    set_sprite(1, 7, offsetx+1);
+    set_sprite(2, 7, offsetx+2);
+    set_sprite(3, 8, offsetx+2);
+    set_sprite(4, 8, offsetx+1);
 
     set_tile(11, 18, stone_color1, 0x00);
     set_tile(12, 18, stone_color2, 0x00);

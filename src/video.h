@@ -121,4 +121,27 @@ void clear_foreground();
  */
 void update_background_diagonal();
 
+/**
+ * @brief Associate tile to a sprite
+ * 
+ * @param sprite_id which sprite to place
+ * @param tile_id   which tile to use
+ */
+void assign_sprite(uint8_t sprite_id, uint8_t tile_id);
+
+/**
+ * @brief Position a sprite
+ * 
+ * @param sprite_id which sprite
+ * @param posy      16-pixel y-position
+ * @param posx      16-pixel y-position
+ */
+void set_sprite(uint8_t sprite_id, uint8_t posy, uint8_t posx);
+
+/**
+ * @brief Reset all sprites
+ * 
+ */
+void reset_sprites();
+
 #endif // _VIDEO_H

@@ -40,7 +40,11 @@ void init_screen() {
     VERA.layer1.tilebase = (TILEBASE >> 11) | 0x03;     // 16 x 16 tiles
     VERA.layer1.mapbase  = MAPBASE1 >> 9;
 
-    VERA.display.video |= 0b00110000;   // enable both layers
+    // enable both layers
+    VERA.display.video |= 0b00110000;   
+
+    // enable sprites
+    VERA.display.video |= 0b01000000;
 
     // set time increment
     prevtick = clock();
@@ -230,7 +234,7 @@ void build_board(uint8_t size, uint8_t offset_y, uint8_t offset_x) {
 
     // game board
     for (j=offset_y ;  j<offset_y + size; j++) {
-        map_base_addr = MAPBASE0 + (j * MAPWIDTH + offset_x )  * 2;
+        map_base_addr = MAPBASE1 + (j * MAPWIDTH + offset_x )  * 2;
         VERA.address = map_base_addr;
         VERA.address_hi = map_base_addr >> 16;
         VERA.address_hi |= 0b10000;
@@ -247,28 +251,28 @@ void build_board(uint8_t size, uint8_t offset_y, uint8_t offset_x) {
     // build board border
     for (i=0; i<size; i++) {
         // top
-        set_bgtile(offset_y - 1, offset_x + i, board_type + TILE_BEDGT, PALETTEBYTE);
+        set_tile(offset_y - 1, offset_x + i, board_type + TILE_BEDGT, PALETTEBYTE);
 
         // left
-        set_bgtile(offset_y + i, offset_x - 1, board_type + TILE_BEDGL, PALETTEBYTE);
+        set_tile(offset_y + i, offset_x - 1, board_type + TILE_BEDGL, PALETTEBYTE);
 
         // bottom
-        set_bgtile(offset_y + size, offset_x + i, board_type + TILE_BEDGB, PALETTEBYTE);
+        set_tile(offset_y + size, offset_x + i, board_type + TILE_BEDGB, PALETTEBYTE);
 
         // right
-        set_bgtile(offset_y + i, offset_x + size, board_type + TILE_BEDGR, PALETTEBYTE);
+        set_tile(offset_y + i, offset_x + size, board_type + TILE_BEDGR, PALETTEBYTE);
 
         // left-top
-        set_bgtile(offset_y - 1, offset_x - 1, board_type + TILE_BEDGLT, PALETTEBYTE);
+        set_tile(offset_y - 1, offset_x - 1, board_type + TILE_BEDGLT, PALETTEBYTE);
 
         // right-top
-        set_bgtile(offset_y - 1, offset_x + size, board_type + TILE_BEDGRT, PALETTEBYTE);
+        set_tile(offset_y - 1, offset_x + size, board_type + TILE_BEDGRT, PALETTEBYTE);
 
         // left-bottom
-        set_bgtile(offset_y + size, offset_x - 1, board_type + TILE_BEDGBL, PALETTEBYTE);
+        set_tile(offset_y + size, offset_x - 1, board_type + TILE_BEDGBL, PALETTEBYTE);
 
         // right-bottom
-        set_bgtile(offset_y + size, offset_x + size, board_type + TILE_BEDGBR, PALETTEBYTE);
+        set_tile(offset_y + size, offset_x + size, board_type + TILE_BEDGBR, PALETTEBYTE);
     }
 }
 
@@ -301,9 +305,72 @@ void clear_foreground() {
 void update_background_diagonal() {
     clock_t curtick = clock();
 
-    if(((curtick - prevtick) * 1000 / CLOCKS_PER_SEC) > 50) {
+    if(((curtick - prevtick) * 1000 / CLOCKS_PER_SEC) > 30) {
         prevtick = curtick;
         VERA.layer0.hscroll = (VERA.layer0.hscroll - 1) % 16;
         VERA.layer0.vscroll = (VERA.layer0.vscroll - 1) % 16;
+    }
+}
+
+/**
+ * @brief Assign a tile to a sprite
+ * 
+ * @param sprite_id which sprite to place
+ * @param tile_id   which tile to use
+ */
+void assign_sprite(uint8_t sprite_id, uint8_t tile_id) {
+    unsigned long sprite_addr = 0x1FC00 + (sprite_id << 3);
+    uint32_t graph_addr = TILEBASE + (tile_id << 8);
+
+    VERA.address = sprite_addr;
+    VERA.address_hi = sprite_addr >> 16;
+    VERA.address_hi |= 0b10000;
+
+    VERA.data0 = graph_addr >> 5;
+    VERA.data0 = (graph_addr >> 13) | (1 << 7);
+    VERA.data0 = 16;
+    VERA.data0 = 0x00;
+    VERA.data0 = 16;
+    VERA.data0 = 0x00;
+    VERA.data0 = 0b00001100;
+    VERA.data0 = 0b01010000;
+}
+
+/**
+ * @brief Set the sprite object
+ * 
+ * @param sprite_id which sprite
+ * @param posy      16-pixel y-position
+ * @param posx      16-pixel y-position
+ */
+void set_sprite(uint8_t sprite_id, uint8_t posy, uint8_t posx) {
+    unsigned long sprite_addr = 0x1FC00 | (sprite_id << 3) | 2;
+
+    VERA.address = sprite_addr;
+    VERA.address_hi = sprite_addr >> 16;
+    VERA.address_hi |= 0b10000;
+
+    VERA.data0 = posx << 4;
+    VERA.data0 = posx << 12;
+    VERA.data0 = posy << 4;
+    VERA.data0 = posy << 12;
+}
+
+/**
+ * @brief Reset all sprites
+ * 
+ */
+void reset_sprites() {
+    uint8_t i,j;
+    unsigned long sprite_addr = 0x1FC00;
+
+    VERA.address = sprite_addr;
+    VERA.address_hi = sprite_addr >> 16;
+    VERA.address_hi |= 0b10000;
+
+    for(i=1; i<128; i++) {
+        for(j=0; j<8; j++) {
+            VERA.data0 = 0x00;
+        }
     }
 }
