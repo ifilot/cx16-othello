@@ -47,6 +47,11 @@ collection.
 4. **Disc Colors**:
     - 10 different stone colors to choose from
 
+5. **Input controls**
+    - Keyboard
+    - Joystick
+    - Mouse
+
 ## Othello Rules
 
 Othello, also known as Reversi, is a two-player strategy board game played on an

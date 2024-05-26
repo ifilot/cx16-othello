@@ -313,6 +313,7 @@ void clear_foreground() {
  * 
  */
 void update_background_diagonal() {
+    #if SCROLL_BACKGROUND == 1
     clock_t curtick = clock();
 
     if(((curtick - prevtick) * 1000 / CLOCKS_PER_SEC) > 30) {
@@ -320,6 +321,7 @@ void update_background_diagonal() {
         VERA.layer0.hscroll = (VERA.layer0.hscroll - 1) % 16;
         VERA.layer0.vscroll = (VERA.layer0.vscroll - 1) % 16;
     }
+    #endif
 }
 
 /**
