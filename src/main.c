@@ -26,6 +26,7 @@
 #include "game.h"
 #include "menu.h"
 #include "mouse.h"
+#include "sound.h"
 
 unsigned char keycode;
 
@@ -34,12 +35,12 @@ void main() {
     init_screen();
     load_tiles();
 
-    // // enable mouse
-    init_mouse();
-
     // load sound engine
     init_sound();
     start_bgmusic();
+
+    // enable mouse
+    init_mouse();
 
     while(1) {
         while(gamestate == GAME_MENU) {

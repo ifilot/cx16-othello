@@ -27,6 +27,7 @@
 #include "video.h"
 #include "game.h"
 #include "mouse.h"
+#include "sound.h"
 
 /**
  * @brief Show game menu

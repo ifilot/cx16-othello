@@ -48,7 +48,6 @@ void game_menu() {
     print_choice();
 
     while(1) {
-        // sample keyboard to make adjustments to the game settings
         asm("jsr $FFE4");
         asm("sta %v", keycode);
 
@@ -116,8 +115,8 @@ void game_menu() {
             return;
         }
 
-        asm("jsr $FF6B");
-        asm("sta %v", mouse_buttons);
+        // asm("jsr $FF6B");
+        // asm("sta %v", mouse_buttons);
 
         // update sound buffer
         sound_fill_buffers();
@@ -145,13 +144,13 @@ void print_choice() {
     // print board size
     switch(boardsize) {
         case 6:
-            memcpy(buf, "6 x 6  ", 7);
+            memcpy(buf, "6 x 6  ", 8);
         break;
         case 8:
-            memcpy(buf, "8 x 8  ", 7);
+            memcpy(buf, "8 x 8  ", 8);
         break;
         case 10:
-            memcpy(buf, "10 x 10", 7);
+            memcpy(buf, "10 x 10", 8);
         break;
     }
     write_string(buf, 9, 1);

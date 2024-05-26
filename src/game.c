@@ -708,6 +708,6 @@ void wait_joystick_release(uint8_t joy_id) {
 
     do {
         read_joystick(joy_id, &joystat1, &joystat2, &joyconn);
-        sound_fill_buffers();
+        //sound_fill_buffers();
     } while(joystat1 != 0xFF || joystat2 != 0xFF);
 }

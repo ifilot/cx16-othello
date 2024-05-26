@@ -21,6 +21,6 @@
 #ifndef _MOUSE_H
 #define _MOUSE_H
 
-void init_mouse();
+void __fastcall__ init_mouse();
 
 #endif // _MOUSE_H
