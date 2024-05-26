@@ -629,8 +629,10 @@ void end_game_state(uint8_t black, uint8_t white) {
     // display winner 
     if(black > white) {
         write_string("PLAYER 1 WINS!", 14, 0);
+        set_background(stone_color1 + 0x10);
     } else if(white > black) {
         write_string("PLAYER 2 WINS!", 14, 0);
+        set_background(stone_color2 + 0x10);
     } else {
         write_string("IT'S A TIE!", 14, 0);
     }

@@ -39,6 +39,13 @@ extern clock_t prevtick;
 void init_screen();
 
 /**
+ * @brief Which tile to use for the background
+ * 
+ * @param tile_id background tile index
+ */
+void set_background(uint8_t tile_id);
+
+/**
  * @brief Clears the screen
  * 
  * Set background tiles everywhere and sets foreground to transparent

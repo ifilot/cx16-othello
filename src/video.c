@@ -57,6 +57,19 @@ void init_screen() {
  * 
  */
 void clear_screen() {
+    // set background
+    set_background(TILE_BG);
+
+    // set all foreground tiles to transparent
+    clear_foreground();
+}
+
+/**
+ * @brief Which tile to use for the background
+ * 
+ * @param tile_id background tile index
+ */
+void set_background(uint8_t tile_id) {
     uint8_t i = 0, j=0;
     uint32_t map_base_addr;
 
@@ -68,13 +81,10 @@ void clear_screen() {
 
     for (j=0; j<MAPHEIGHT; j++) {
         for (i=0; i<MAPWIDTH; i++) {
-            VERA.data0 = TILE_BG;       // background tile
+            VERA.data0 = tile_id;       // background tile
             VERA.data0 = PALETTEBYTE;   // palette offset data
         }
     }
-
-    // set all foreground tiles to transparent
-    clear_foreground();
 }
 
 /**
