@@ -31,6 +31,7 @@
 #include "constants.h"
 #include "video.h"
 #include "sound.h"
+#include "mouse.h"
 
 extern uint8_t *board;              // store board configuration
 extern uint8_t *edgefield;          // which board positions are 'active'

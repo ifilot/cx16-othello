@@ -144,4 +144,11 @@ void set_sprite(uint8_t sprite_id, uint8_t posy, uint8_t posx);
  */
 void reset_sprites();
 
+/**
+ * @brief Set the mouse pointer
+ * 
+ * @param tile_id   which tile to use
+ */
+void set_mouse_pointer(uint8_t tile_id);
+
 #endif // _VIDEO_H

@@ -28,7 +28,6 @@ void game_menu() {
     static unsigned char keycode;
     unsigned short *mouse_x = (unsigned short *)0x2;
     unsigned short *mouse_y = (unsigned short *)0x4;
-    static unsigned char mouse_buttons;
 
     write_string("CX16-OTHELLO", 0, 1);
     write_string("music by Crisps", 1, 5);
@@ -114,9 +113,6 @@ void game_menu() {
                 init_game();
             return;
         }
-
-        // asm("jsr $FF6B");
-        // asm("sta %v", mouse_buttons);
 
         // update sound buffer
         sound_fill_buffers();

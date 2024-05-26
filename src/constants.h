@@ -42,6 +42,7 @@
 #define TILE_EMPTY_CURSOR   0x02
 #define TILE_BLACK          0x03
 #define TILE_WHITE          0x04
+#define TILE_MOUSE_CURSOR   0x0F
 #define TILE_BLACK_CURSOR   0x13
 #define TILE_WHITE_CURSOR   0x14
 

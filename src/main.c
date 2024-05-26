@@ -41,6 +41,7 @@ void main() {
 
     // enable mouse
     init_mouse();
+    set_mouse_pointer(TILE_MOUSE_CURSOR);
 
     while(1) {
         while(gamestate == GAME_MENU) {

@@ -24,9 +24,9 @@
 
 .code
 .proc _init_mouse: near
-    sec
-    jsr X16::Kernal::SCREEN_MODE
     lda #1
+    ldx #40
+    ldy #30
     jsr X16::Kernal::MOUSE_CONFIG
     rts
 .endproc

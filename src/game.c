@@ -390,7 +390,6 @@ void computer_turn() {
     uint8_t bestx[100];
     uint8_t bestvalue = 0;
     uint8_t i=0, j=0, k=0;
-    unsigned char keycode = 0;
     clock_t start, next;
 
     // keep track of time
@@ -476,6 +475,10 @@ void human_turn() {
     unsigned char joystat1 = 0xFF;
     unsigned char joystat2 = 0xFF;
     unsigned char joyconn = 0xFF;
+    static uint8_t mouse_buttons = 0x00;
+    uint16_t *mouse_x = (uint16_t *)0x2;
+    uint16_t *mouse_y = (uint16_t *)0x4;
+    int8_t ccurx, ccury;
 
     // first check whether the human can actually perform a valid move
     // if not, we have to swap the turn again (and display an error message)
@@ -551,6 +554,29 @@ void human_turn() {
             place_stone(cury, curx, PROBE_NO, current_player);
             return;
         }
+    }
+
+    // read mouse
+    asm("ldx #2");
+    asm("jsr $FF6B");
+    asm("sta %v", mouse_buttons);
+
+    // determine tile position based based on cursor position
+    ccurx = (*mouse_x >> 4) - board_offset_x;
+    ccury = (*mouse_y >> 4) - board_offset_y;
+    if(ccurx >= 0 && ccurx < boardsize && ccury >=0 && ccury < boardsize) {
+        set_cursor(ccury, ccurx);
+    }
+
+    if(mouse_buttons & 1) {
+        // wait until mouse button is released
+        while(mouse_buttons != 0x00) {
+            asm("ldx #2");
+            asm("jsr $FF6B");
+            asm("sta %v", mouse_buttons);
+        }
+        // place stone in current mouse location
+        place_stone(cury, curx, PROBE_NO, current_player);
     }
 }
 

@@ -361,16 +361,40 @@ void set_sprite(uint8_t sprite_id, uint8_t posy, uint8_t posx) {
  * 
  */
 void reset_sprites() {
-    uint8_t i,j;
+    uint8_t i;
     unsigned long sprite_addr = 0x1FC00;
 
     VERA.address = sprite_addr;
     VERA.address_hi = sprite_addr >> 16;
     VERA.address_hi |= 0b10000;
 
-    for(i=1; i<128; i++) {
-        for(j=0; j<8; j++) {
-            VERA.data0 = 0x00;
-        }
+    for(i=0; i<128; i++) {
+        VERA.data0 = 0x00;
+        VERA.data0 = 0x00;
+        VERA.data0 = 16;
+        VERA.data0 = 0x00;
+        VERA.data0 = 16;
+        VERA.data0 = 0x00;
+        VERA.data0 = 0b00001100;
+        VERA.data0 = 0b01010000;
     }
+
+    set_mouse_pointer(TILE_MOUSE_CURSOR);
+}
+
+/**
+ * @brief Set the mouse pointer
+ * 
+ * @param tile_id   which tile to use
+ */
+void set_mouse_pointer(uint8_t tile_id) {
+    unsigned long sprite_addr = 0x1FC00;
+    uint32_t graph_addr = TILEBASE + (tile_id << 8);
+
+    VERA.address = sprite_addr;
+    VERA.address_hi = sprite_addr >> 16;
+    VERA.address_hi |= 0b10000;
+
+    VERA.data0 = graph_addr >> 5;
+    VERA.data0 = (graph_addr >> 13) | (1 << 7);
 }
