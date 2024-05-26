@@ -389,7 +389,7 @@ void computer_turn() {
     uint8_t besty[100];
     uint8_t bestx[100];
     uint8_t bestvalue = 0;
-    uint8_t i=0, j=0, k=0;
+    uint8_t i=0, j=0, k=0, v=0;
     clock_t start, next;
 
     // keep track of time
@@ -426,18 +426,14 @@ void computer_turn() {
     // the best result
     for(j=0; j<boardsize; j++) {
         for(i=0; i<boardsize; i++) {
-            if(stonecounter[j * boardsize + i] > bestvalue) {
-                bestvalue = stonecounter[j * boardsize + i];
-            }
-        }
-    }
-
-    // make another loop and collect all tiles that have the bestvalue as an
-    // option
-    k = 0;
-    for(j=0; j<boardsize; j++) {
-        for(i=0; i<boardsize; i++) {
-            if(stonecounter[j * boardsize + i] == bestvalue) {
+            v = stonecounter[j * boardsize + i];
+            if(v > bestvalue) {         // a new best value
+                bestvalue = v;
+                k=0;
+                besty[k] = j;
+                bestx[k] = i;
+                k++;
+            } else if(v == bestvalue) { // another tile with best value
                 besty[k] = j;
                 bestx[k] = i;
                 k++;
@@ -454,8 +450,14 @@ void computer_turn() {
         }
         while (((next - start) * 1000 / CLOCKS_PER_SEC) < cpu_waittime);
 
-        // randomly select best option from series of best values
-        k = rand() % (k + 1);
+        // randomly select best option from series of best values, current value
+        // of k is the number of times a best value is found; if there is only
+        // one option (k=1), just pick that option and do not run rand()
+        if(k > 1) {
+            k = rand() % (k + 1);   // select value in range [0, k-1]
+        } else {
+            k = 0;
+        }
 
         place_stone(besty[k], bestx[k], PROBE_NO, current_player);
         no_move_counter = 0;
