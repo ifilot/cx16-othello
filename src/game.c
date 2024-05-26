@@ -576,6 +576,9 @@ void human_turn() {
             asm("ldx #2");
             asm("jsr $FF6B");
             asm("sta %v", mouse_buttons);
+
+            sound_fill_buffers();
+            update_background_diagonal();
         }
         // place stone in current mouse location
         place_stone(cury, curx, PROBE_NO, current_player);
@@ -738,6 +741,7 @@ void wait_joystick_release(uint8_t joy_id) {
 
     do {
         read_joystick(joy_id, &joystat1, &joystat2, &joyconn);
-        //sound_fill_buffers();
+        sound_fill_buffers();
+        update_background_diagonal();
     } while(joystat1 != 0xFF || joystat2 != 0xFF);
 }

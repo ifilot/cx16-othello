@@ -108,5 +108,6 @@
 #define RAMBANK (*(uint8_t*)0)
 
 #define SCROLL_BACKGROUND   1
+#define SCROLLSPEED         50
 
 #endif // _CONSTANTS_H
