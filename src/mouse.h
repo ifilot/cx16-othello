@@ -18,27 +18,9 @@
  *                                                                        *
  **************************************************************************/
 
-#ifndef _MENU_H
-#define _MENU_H
+#ifndef _MOUSE_H
+#define _MOUSE_H
 
-#include <cx16.h>
-#include <stdint.h>
+void __fastcall__ init_mouse();
 
-#include "video.h"
-#include "game.h"
-#include "mouse.h"
-#include "sound.h"
-
-/**
- * @brief Show game menu
- * 
- */
-void game_menu();
-
-/**
- * @brief Print current game configuration to the screen
- * 
- */
-void print_choice();
-
-#endif // _MENU_H
+#endif // _MOUSE_H

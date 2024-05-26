@@ -40,19 +40,27 @@ CHANNEL = 0
 ; Start the sound engine
 ;
 .proc _init_sound: near
-    jsr zsmkit::zsm_init_engine     ; initialize engine
-    jsr zsmkit::zsmkit_setisr
+   jsr zsmkit::zsm_init_engine     ; initialize engine
+   jsr zsmkit::zsmkit_setisr
 
-	ldx #0			; priority
-	lda #<filename  ; filename low byte
-	ldy #>filename  ; high byte
+   ; load background music
+	ldx #0			   ; priority
+	lda #<filename1   ; filename low byte
+	ldy #>filename1   ; high byte
 	jsr zsmkit::zsm_setfile
 
-	ldx #0			; priority
-	lda #$20		; attenuation value
+   ; load placement sound for tile
+   ldx #1			   ; priority
+	lda #<filename2   ; filename low byte
+	ldy #>filename2   ; high byte
+	jsr zsmkit::zsm_setfile
+
+   ; set attenuation for background music
+	ldx #0			   ; priority
+	lda #$20		      ; attenuation value
 	jsr zsmkit::zsm_setatten
 
-    rts
+   rts
 .endproc
 
 ;
@@ -95,16 +103,12 @@ CHANNEL = 0
 ; Operates on fixed channel set by CHANNEL variable
 ;
 .proc _play_thumb: near
-   ldx #<TONE1
-   ldy #>TONE1
-   jsr play_note
-   wai
-   wai
-   wai
-   wai
-   wai
-   jsr sound_off
-   rts
+   ldx #1
+   jsr zsmkit::zsm_rewind
+   clc               ; clear carry flag
+   jsr zsmkit::zsm_setloop
+	jsr zsmkit::zsm_play
+	rts
 
 ;
 ; Play single note
@@ -147,4 +151,5 @@ sound_off:
    rts
 .endproc
 
-filename: .asciiz "cot.zsm"
+filename1: .asciiz "othello.zsm"
+filename2: .asciiz "tile.zsm"

@@ -25,6 +25,8 @@
 #include "constants.h"
 #include "game.h"
 #include "menu.h"
+#include "mouse.h"
+#include "sound.h"
 
 unsigned char keycode;
 
@@ -36,6 +38,10 @@ void main() {
     // load sound engine
     init_sound();
     start_bgmusic();
+
+    // enable mouse
+    init_mouse();
+    set_mouse_pointer(TILE_MOUSE_CURSOR);
 
     while(1) {
         while(gamestate == GAME_MENU) {
@@ -69,6 +75,9 @@ void main() {
 
             // update sound buffer
             sound_fill_buffers();
+
+            // diagonal background scrolling
+            update_background_diagonal();
         }
     }
 }

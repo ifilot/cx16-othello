@@ -26,25 +26,27 @@
  */
 void game_menu() {
     static unsigned char keycode;
+    unsigned short *mouse_x = (unsigned short *)0x2;
+    unsigned short *mouse_y = (unsigned short *)0x4;
 
     write_string("CX16-OTHELLO", 0, 1);
-    write_string("RC1", 0, 17);
+    write_string("music by Crisps", 1, 5);
+    write_string("1.1.0", 0, 15);
 
-    write_string("(1) PLAYER 1:", 2, 1);
-    write_string("(2) PLAYER 2:", 3, 1);
-    write_string("(B) BOARD:", 4, 1);
+    write_string("(1) PLAYER 1:", 3, 1);
+    write_string("(2) PLAYER 2:", 4, 1);
+    write_string("(B) BOARD:", 6, 1);
+
+    write_string("(S) SIZE:", 8, 1);
 
     write_string("(C) TILE COLOR 1:", 11, 1);
     write_string("(V) TILE COLOR 2:", 12, 1);
-    write_string("(S) BOARD", 6, 1);
-    write_string("    SIZE:", 7, 1);
 
     write_string("Hit ENTER to start", 14, 1);
 
     print_choice();
 
     while(1) {
-        // sample keyboard to make adjustments to the game settings
         asm("jsr $FFE4");
         asm("sta %v", keycode);
 
@@ -114,6 +116,7 @@ void game_menu() {
 
         // update sound buffer
         sound_fill_buffers();
+        update_background_diagonal();
     }
 }
 
@@ -122,40 +125,46 @@ void game_menu() {
  * 
  */
 void print_choice() {
-    char buf[20];
+    char buf[8] = {0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00, 0x00};
     static const uint8_t offsetx = 12;
 
     // print whether player 1 is a human or a cpu
-    write_string(player1_type == PLAYER_HUMAN ? "HUMAN" : "CPU  ", 2, 14);
+    write_string(player1_type == PLAYER_HUMAN ? "HUMAN" : "CPU  ", 3, 14);
     
     // print whether player 2 is a human or a cpu
-    write_string(player2_type == PLAYER_HUMAN ? "HUMAN" : "CPU  ", 3, 14);
+    write_string(player2_type == PLAYER_HUMAN ? "HUMAN" : "CPU  ", 4, 14);
 
     // print board style
-    write_string(board_type == BOARD_STONE ? "STONE" : "WOOD  ", 4, 12);
+    write_string(board_type == BOARD_STONE ? "STONE" : "WOOD  ", 7, 1);
 
     // print board size
     switch(boardsize) {
         case 6:
-            memcpy(buf, " 6 x 6 ", 8);
+            memcpy(buf, "6 x 6  ", 8);
         break;
         case 8:
-            memcpy(buf, " 8 x 8 ", 8);
+            memcpy(buf, "8 x 8  ", 8);
         break;
         case 10:
             memcpy(buf, "10 x 10", 8);
         break;
     }
-    write_string(buf, 8, 1);
+    write_string(buf, 9, 1);
 
     // build sample board
     build_board(4, 6, offsetx);
 
+    // set sprites
+    assign_sprite(1, stone_color1);
+    assign_sprite(2, stone_color2);
+    assign_sprite(3, stone_color1);
+    assign_sprite(4, stone_color2);
+
     // print stone colors
-    set_tile(7, offsetx+1, stone_color1, 0x00);
-    set_tile(7, offsetx+2, stone_color2, 0x00);
-    set_tile(8, offsetx+2, stone_color1, 0x00);
-    set_tile(8, offsetx+1, stone_color2, 0x00);
+    set_sprite(1, 7, offsetx+1);
+    set_sprite(2, 7, offsetx+2);
+    set_sprite(3, 8, offsetx+2);
+    set_sprite(4, 8, offsetx+1);
 
     set_tile(11, 18, stone_color1, 0x00);
     set_tile(12, 18, stone_color2, 0x00);

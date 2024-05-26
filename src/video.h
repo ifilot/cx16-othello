@@ -25,15 +25,25 @@
 #include <cx16.h>
 #include <cbm.h>
 #include <ascii_charmap.h>
+#include <time.h>
 
 #include "constants.h"
 #include "game.h"
+
+extern clock_t prevtick;
 
 /**
  * @brief Initialize screen
  * 
  */
 void init_screen();
+
+/**
+ * @brief Which tile to use for the background
+ * 
+ * @param tile_id background tile index
+ */
+void set_background(uint8_t tile_id);
 
 /**
  * @brief Clears the screen
@@ -111,5 +121,41 @@ void build_board(uint8_t size, uint8_t offset_y, uint8_t offset_x);
  * 
  */
 void clear_foreground();
+
+/**
+ * @brief Update diagonal background scrolling
+ * 
+ */
+void update_background_diagonal();
+
+/**
+ * @brief Associate tile to a sprite
+ * 
+ * @param sprite_id which sprite to place
+ * @param tile_id   which tile to use
+ */
+void assign_sprite(uint8_t sprite_id, uint8_t tile_id);
+
+/**
+ * @brief Position a sprite
+ * 
+ * @param sprite_id which sprite
+ * @param posy      16-pixel y-position
+ * @param posx      16-pixel y-position
+ */
+void set_sprite(uint8_t sprite_id, uint8_t posy, uint8_t posx);
+
+/**
+ * @brief Reset all sprites
+ * 
+ */
+void reset_sprites();
+
+/**
+ * @brief Set the mouse pointer
+ * 
+ * @param tile_id   which tile to use
+ */
+void set_mouse_pointer(uint8_t tile_id);
 
 #endif // _VIDEO_H

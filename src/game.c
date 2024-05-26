@@ -36,6 +36,7 @@ uint8_t boardsize = 8;
 uint8_t board_offset_x = 6;
 uint8_t board_offset_y = 4;
 uint8_t no_move_counter = 0;
+uint16_t cpu_waittime = 200;
 
 /**
  * @brief Initialize the game scene
@@ -66,6 +67,14 @@ void init_game() {
     // reset no move counter
     no_move_counter = 0;
 
+    // set all sprites to transparent
+    for(i=0; i<(boardsize * boardsize); i++) {
+        assign_sprite(i+1, 0x00);
+    }
+
+    // assign cursor sprite
+    assign_sprite(SPRITE_TILE_CURSOR, TILE_EMPTY_CURSOR);
+
     // build the game board
     build_playfield();
 
@@ -87,6 +96,13 @@ void init_game() {
     // set first player
     current_player = PLAYER_ONE;
 
+    // set CPU wait time
+    if(player1_type == PLAYER_HUMAN || player2_type == PLAYER_HUMAN) {
+        cpu_waittime = 500;
+    } else {
+        cpu_waittime = 100;
+    }
+
     // start game
     gamestate = GAME_RUN;
 }
@@ -100,20 +116,21 @@ void init_game() {
  */
 void set_stone(uint8_t y, uint8_t x, uint8_t stone) {
     int8_t sx=0, sy=0;
+    uint8_t tile_idx = y * boardsize + x;
+    uint8_t sprite_id = tile_idx + 1;
 
     // update board and edgefield
-    board[y * boardsize + x] = stone;
-    edgefield[y * boardsize + x] = EDGEFIELD_INACTIVE;
+    board[tile_idx] = stone;
+    edgefield[tile_idx] = EDGEFIELD_INACTIVE;
 
     switch(stone) {
         case STONE_PLAYER1:
-            set_tile(y + board_offset_y, x + board_offset_x, stone_color1, PALETTEBYTE);
+            assign_sprite(sprite_id, stone_color1);
+            set_sprite(sprite_id, y + board_offset_y, x + board_offset_x);
         break;
         case STONE_PLAYER2:
-            set_tile(y + board_offset_y, x + board_offset_x, stone_color2, PALETTEBYTE);
-        break;
-        default:
-            set_tile(y + board_offset_y, x + board_offset_x, TILE_NONE, PALETTEBYTE);
+            assign_sprite(sprite_id, stone_color2);
+            set_sprite(sprite_id, y + board_offset_y, x + board_offset_x);
         break;
     }
 
@@ -142,32 +159,11 @@ void set_cursor(uint8_t y, uint8_t x) {
     uint8_t edge = edgefield[cury * boardsize + curx];
     uint32_t map_base_addr = 0x0000;
 
-    // remove the old cursor
-    switch(tile) {
-        case STONE_PLAYER1:
-            set_tile(cury + board_offset_y, curx + board_offset_x, stone_color1, PALETTEBYTE);
-        break;
-        case STONE_PLAYER2:
-            set_tile(cury + board_offset_y, curx + board_offset_x, stone_color2, PALETTEBYTE);
-        break;
-    }
+    set_sprite(SPRITE_TILE_CURSOR, board_offset_y + y, board_offset_x + x);
 
     // update cursor positions
     curx = x;
     cury = y;
-
-    tile = board[y * boardsize + x];
-    switch(tile) {
-        case STONE_PLAYER1:
-            set_tile(cury + board_offset_y, curx + board_offset_x, stone_color1 + 0x10, PALETTEBYTE);
-        break;
-        case STONE_PLAYER2:
-            set_tile(cury + board_offset_y, curx + board_offset_x, stone_color2 + 0x10, PALETTEBYTE);
-        break;
-        default:
-            set_tile(cury + board_offset_y, curx + board_offset_x, TILE_EMPTY_CURSOR, PALETTEBYTE);
-        break;
-    }
 }
 
 /**
@@ -178,15 +174,6 @@ void set_cursor(uint8_t y, uint8_t x) {
  */
 void move_cursor(int8_t y, int8_t x) {
     uint8_t tile = board[cury * boardsize + curx];
-
-    // clean up old cursor position
-    if(tile == STONE_NONE) {
-        set_tile(cury + board_offset_y, curx + board_offset_x, TILE_NONE, PALETTEBYTE);
-    } else if(tile == STONE_PLAYER1) {
-        set_tile(cury + board_offset_y, curx + board_offset_x, stone_color1, PALETTEBYTE);
-    } else if(tile == STONE_PLAYER2) {
-        set_tile(cury + board_offset_y, curx + board_offset_x, stone_color2, PALETTEBYTE);
-    }
 
     x += curx;
     y += cury;
@@ -399,11 +386,14 @@ void count_stones(uint8_t end) {
  * 
  */
 void computer_turn() {
-    uint8_t besty = 0;
-    uint8_t bestx = 0;
+    uint8_t besty[100];
+    uint8_t bestx[100];
     uint8_t bestvalue = 0;
-    uint8_t i=0, j=0;
-    unsigned char keycode = 0;
+    uint8_t i=0, j=0, k=0, v=0;
+    clock_t start, next;
+
+    // keep track of time
+    start = clock();
 
     for(j=0; j<boardsize; j++) {
         for(i=0; i<boardsize; i++) {
@@ -418,20 +408,58 @@ void computer_turn() {
         }
     }
 
+    // if any of the corners are an option, increase its value by 50 points
+    if(stonecounter[0] > 0) {
+        stonecounter[0] += 10;
+    }
+    if(stonecounter[boardsize - 1] > 0) {
+        stonecounter[boardsize - 1] += 10;
+    }
+    if(stonecounter[boardsize * boardsize - 1] > 0) {
+        stonecounter[boardsize * boardsize - 1] += 10;
+    }
+    if(stonecounter[boardsize * (boardsize - 1)] > 0) {
+        stonecounter[boardsize * (boardsize - 1)] += 10;
+    }
+
     // now loop once more over the playfield and pick the option that yields
     // the best result
     for(j=0; j<boardsize; j++) {
         for(i=0; i<boardsize; i++) {
-            if(stonecounter[j * boardsize + i] > bestvalue) {
-                bestvalue = stonecounter[j * boardsize + i];
-                bestx = i;
-                besty = j;
+            v = stonecounter[j * boardsize + i];
+            if(v > bestvalue) {         // a new best value
+                bestvalue = v;
+                k=0;
+                besty[k] = j;
+                bestx[k] = i;
+                k++;
+            } else if(v == bestvalue) { // another tile with best value
+                besty[k] = j;
+                bestx[k] = i;
+                k++;
             }
         }
     }
 
     if(bestvalue != 0x00) {
-        place_stone(besty, bestx, PROBE_NO, current_player);
+        // add artificial delay
+        do {
+            next = clock();
+            update_background_diagonal();
+            sound_fill_buffers();
+        }
+        while (((next - start) * 1000 / CLOCKS_PER_SEC) < cpu_waittime);
+
+        // randomly select best option from series of best values, current value
+        // of k is the number of times a best value is found; if there is only
+        // one option (k=1), just pick that option and do not run rand()
+        if(k > 1) {
+            k = rand() % (k + 1);   // select value in range [0, k-1]
+        } else {
+            k = 0;
+        }
+
+        place_stone(besty[k], bestx[k], PROBE_NO, current_player);
         no_move_counter = 0;
     } else {
         // no stone can be placed, so turn over to the other player
@@ -449,6 +477,10 @@ void human_turn() {
     unsigned char joystat1 = 0xFF;
     unsigned char joystat2 = 0xFF;
     unsigned char joyconn = 0xFF;
+    static uint8_t mouse_buttons = 0x00;
+    uint16_t *mouse_x = (uint16_t *)0x2;
+    uint16_t *mouse_y = (uint16_t *)0x4;
+    int8_t ccurx, ccury;
 
     // first check whether the human can actually perform a valid move
     // if not, we have to swap the turn again (and display an error message)
@@ -487,6 +519,7 @@ void human_turn() {
         case KEYCODE_ESCAPE:
             gamestate = GAME_MENU;
             free_resources();
+            reset_sprites();
         return;
     }
 
@@ -523,6 +556,32 @@ void human_turn() {
             place_stone(cury, curx, PROBE_NO, current_player);
             return;
         }
+    }
+
+    // read mouse
+    asm("ldx #2");
+    asm("jsr $FF6B");
+    asm("sta %v", mouse_buttons);
+
+    // determine tile position based based on cursor position
+    ccurx = (*mouse_x >> 4) - board_offset_x;
+    ccury = (*mouse_y >> 4) - board_offset_y;
+    if(ccurx >= 0 && ccurx < boardsize && ccury >=0 && ccury < boardsize) {
+        set_cursor(ccury, ccurx);
+    }
+
+    if(mouse_buttons & 1) {
+        // wait until mouse button is released
+        while(mouse_buttons != 0x00) {
+            asm("ldx #2");
+            asm("jsr $FF6B");
+            asm("sta %v", mouse_buttons);
+
+            sound_fill_buffers();
+            update_background_diagonal();
+        }
+        // place stone in current mouse location
+        place_stone(cury, curx, PROBE_NO, current_player);
     }
 }
 
@@ -575,8 +634,10 @@ void end_game_state(uint8_t black, uint8_t white) {
     // display winner 
     if(black > white) {
         write_string("PLAYER 1 WINS!", 14, 0);
+        set_background(stone_color1 + 0x10);
     } else if(white > black) {
         write_string("PLAYER 2 WINS!", 14, 0);
+        set_background(stone_color2 + 0x10);
     } else {
         write_string("IT'S A TIE!", 14, 0);
     }
@@ -591,11 +652,13 @@ void end_game_state(uint8_t black, uint8_t white) {
         switch(keycode) {
             case KEYCODE_RETURN:
                 gamestate = GAME_MENU;
+                reset_sprites();
             return;
         }
 
         sound_fill_buffers();
-    } 
+        update_background_diagonal();
+    }
 }
 
 /**
@@ -624,6 +687,7 @@ uint8_t check_valid_move() {
  * 
  */
 void free_resources() {
+    uint8_t i=0;
     free(board);
     free(edgefield);
     free(stonecounter);
@@ -678,5 +742,6 @@ void wait_joystick_release(uint8_t joy_id) {
     do {
         read_joystick(joy_id, &joystat1, &joystat2, &joyconn);
         sound_fill_buffers();
+        update_background_diagonal();
     } while(joystat1 != 0xFF || joystat2 != 0xFF);
 }

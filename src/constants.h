@@ -42,6 +42,7 @@
 #define TILE_EMPTY_CURSOR   0x02
 #define TILE_BLACK          0x03
 #define TILE_WHITE          0x04
+#define TILE_MOUSE_CURSOR   0x0F
 #define TILE_BLACK_CURSOR   0x13
 #define TILE_WHITE_CURSOR   0x14
 
@@ -58,6 +59,10 @@
 #define TILE_BEDGBL         0x07
 #define TILE_BEDGB          0x08
 #define TILE_BEDGBR         0x09
+
+// sprites
+#define SPRITE_MOUSE_CURSOR 0x00
+#define SPRITE_TILE_CURSOR  0x65
 
 // stone colors
 #define STONE_RED           0x03
@@ -101,5 +106,8 @@
 #define YES                 0x01
 
 #define RAMBANK (*(uint8_t*)0)
+
+#define SCROLL_BACKGROUND   1
+#define SCROLLSPEED         50
 
 #endif // _CONSTANTS_H
