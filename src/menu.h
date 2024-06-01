@@ -29,11 +29,25 @@
 #include "mouse.h"
 #include "sound.h"
 
+extern uint8_t helppage;
+
 /**
- * @brief Show game menu
+ * @brief Show game settings menu
  * 
  */
-void game_menu();
+void game_settings();
+
+/**
+ * @brief Show game title screen
+ * 
+ */
+void game_title();
+
+/**
+ * @brief Show help screen
+ * 
+ */
+void game_help();
 
 /**
  * @brief Print current game configuration to the screen

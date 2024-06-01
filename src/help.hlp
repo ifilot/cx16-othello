@@ -1,0 +1,88 @@
+#
+# Generalized HELP file, any lines starting with "#" will be ignored
+# in the parsing
+#
+# All pages are 320x240 pixels or 20 x 15 characters (16x16 font size)
+# Writeable area is however 20x12 characters as first line and bottom two
+# lines are already used.
+#
+|PAGE1|
+____________________        
+Othello for the 
+Commander X16 is a 
+modern adaptation 
+of the classic 
+strategy board game,
+tailored for the 
+retro charm of the 
+X16 platform.
+|ENDPAGE|
+|PAGE2|
+____________________
+Known for its simple
+yet strategic 
+gameplay, Othello 
+challenges players 
+to outmaneuver their
+opponent by flipping
+discs (stones) on 
+the playing board.
+|ENDPAGE|
+|PAGE3|
+____________________
+The objective is to 
+have the majority 
+of stones in your 
+color when the 
+board is filled.
+|ENDPAGE|
+|PAGE4|
+____________________
+Keyboard, joystick
+and mouse can all
+be used to play the
+game.
+When playing with
+the keyboard, use
+the arrow keys to
+move the cursor and
+press SPACE to place
+a disc.
+|ENDPAGE|
+|PAGE5|
+____________________
+When playing with
+the joystick, use the
+d-pad to move the
+cursor and press the
+B key (yellow key on
+SNES controller) to
+place a disc.
+|ENDPAGE|
+|PAGE6|
+____________________
+When playing with
+the mouse, simply
+move the cursor
+above the tile and
+press the left mouse
+key to place a disc.
+The cursor position 
+is ignored when 
+playing with the 
+mouse.
+|ENDPAGE|
+#|PAGE|
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#|ENDPAGE|

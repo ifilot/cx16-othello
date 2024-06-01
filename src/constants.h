@@ -43,8 +43,7 @@
 #define TILE_BLACK          0x03
 #define TILE_WHITE          0x04
 #define TILE_MOUSE_CURSOR   0x0F
-#define TILE_BLACK_CURSOR   0x13
-#define TILE_WHITE_CURSOR   0x14
+#define TILE_HIGHLIGHT      0x12
 
 // board offsets
 #define BOARD_WOOD          0x20
@@ -63,6 +62,7 @@
 // sprites
 #define SPRITE_MOUSE_CURSOR 0x00
 #define SPRITE_TILE_CURSOR  0x65
+#define SPRITE_HIGHLIGHT    0x66
 
 // stone colors
 #define STONE_RED           0x03
@@ -95,6 +95,8 @@
 #define GAME_STOP           0x00
 #define GAME_RUN            0x01
 #define GAME_MENU           0x02
+#define GAME_SETTINGS       0x03
+#define GAME_HELP           0x04
 
 #define PLAYER_HUMAN        0x00
 #define PLAYER_CPU          0x01
@@ -109,5 +111,7 @@
 
 #define SCROLL_BACKGROUND   1
 #define SCROLLSPEED         50
+
+#define HELPPAGES           6
 
 #endif // _CONSTANTS_H

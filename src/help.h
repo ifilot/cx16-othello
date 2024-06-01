@@ -18,20 +18,9 @@
  *                                                                        *
  **************************************************************************/
 
-#ifndef _SOUND_H
-#define _SOUND_H
+#ifndef _HELP_H
+#define _HELP_H
 
-#include <stdint.h>
+void __fastcall__ load_help_assets();
 
-#include "constants.h"
-#include "sound_low.h"
-
-extern uint8_t music;               // whether to play music
-
-/**
- * @brief Fill sound buffer
- * 
- */
-void sound_fill_buffers();
-
-#endif // _SOUND_H
+#endif // _HELP_H

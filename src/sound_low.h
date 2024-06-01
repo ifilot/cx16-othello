@@ -18,20 +18,43 @@
  *                                                                        *
  **************************************************************************/
 
-#ifndef _SOUND_H
-#define _SOUND_H
-
-#include <stdint.h>
-
-#include "constants.h"
-#include "sound_low.h"
-
-extern uint8_t music;               // whether to play music
+#ifndef _SOUND_LOW_H
+#define _SOUND_LOW_H
 
 /**
- * @brief Fill sound buffer
+ * @brief Initialize sound engine
  * 
  */
-void sound_fill_buffers();
+void __fastcall__ init_sound();
 
-#endif // _SOUND_H
+/**
+ * @brief Start background music
+ * 
+ */
+void __fastcall__ start_bgmusic();
+
+/**
+ * @brief Stop background music
+ * 
+ */
+void __fastcall__ stop_bgmusic();
+
+/**
+ * @brief Rewind background music
+ * 
+ */
+void __fastcall__ rewind_bgmusic();
+
+/**
+ * @brief Fill sound buffers
+ * 
+ */
+void __fastcall__ sound_fill_buffers_asm();
+
+/**
+ * @brief Play short sound when placing down a stone
+ * 
+ */
+void __fastcall__ play_thumb();
+
+#endif // _SOUND_LOW_H

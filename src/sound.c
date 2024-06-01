@@ -18,20 +18,16 @@
  *                                                                        *
  **************************************************************************/
 
-#ifndef _SOUND_H
-#define _SOUND_H
+#include "sound.h"
 
-#include <stdint.h>
-
-#include "constants.h"
-#include "sound_low.h"
-
-extern uint8_t music;               // whether to play music
+uint8_t music = YES;
 
 /**
  * @brief Fill sound buffer
  * 
  */
-void sound_fill_buffers();
-
-#endif // _SOUND_H
+void sound_fill_buffers() {
+    if(music) {
+        sound_fill_buffers_asm();
+    }
+}

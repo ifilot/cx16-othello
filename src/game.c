@@ -37,6 +37,7 @@ uint8_t board_offset_x = 6;
 uint8_t board_offset_y = 4;
 uint8_t no_move_counter = 0;
 uint16_t cpu_waittime = 200;
+uint8_t background_scroll = YES;
 
 /**
  * @brief Initialize the game scene
@@ -155,10 +156,6 @@ void set_stone(uint8_t y, uint8_t x, uint8_t stone) {
  * @param x board x position
  */
 void set_cursor(uint8_t y, uint8_t x) {
-    uint8_t tile = board[cury * boardsize + curx];
-    uint8_t edge = edgefield[cury * boardsize + curx];
-    uint32_t map_base_addr = 0x0000;
-
     set_sprite(SPRITE_TILE_CURSOR, board_offset_y + y, board_offset_x + x);
 
     // update cursor positions
@@ -279,9 +276,6 @@ uint8_t place_stone(uint8_t y, uint8_t x, uint8_t probe, uint8_t player) {
 
     // change turn
     swap_turn();
-
-    // reset cursor
-    set_cursor(y, x);
 
     // display current number of stones
     count_stones(COUNT_NO_GAME_END);
@@ -567,21 +561,19 @@ void human_turn() {
     ccurx = (*mouse_x >> 4) - board_offset_x;
     ccury = (*mouse_y >> 4) - board_offset_y;
     if(ccurx >= 0 && ccurx < boardsize && ccury >=0 && ccury < boardsize) {
-        set_cursor(ccury, ccurx);
-    }
+        if(mouse_buttons & 1) {
+            // wait until mouse button is released
+            while(mouse_buttons != 0x00) {
+                asm("ldx #2");
+                asm("jsr $FF6B");
+                asm("sta %v", mouse_buttons);
 
-    if(mouse_buttons & 1) {
-        // wait until mouse button is released
-        while(mouse_buttons != 0x00) {
-            asm("ldx #2");
-            asm("jsr $FF6B");
-            asm("sta %v", mouse_buttons);
-
-            sound_fill_buffers();
-            update_background_diagonal();
+                sound_fill_buffers();
+                update_background_diagonal();
+            }
+            // place stone in current mouse location
+            place_stone(ccury, ccurx, PROBE_NO, current_player);
         }
-        // place stone in current mouse location
-        place_stone(cury, curx, PROBE_NO, current_player);
     }
 }
 
