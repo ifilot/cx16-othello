@@ -1,0 +1,52 @@
+#
+# Generalized HELP file, any lines starting with "#" will be ignored
+# in the parsing
+#
+# All pages are 320x240 pixels or 20 x 15 characters (16x16 font size)
+# Writeable area is however 20x12 characters as first line and bottom two
+# lines are already used.
+#
+|PAGE1|
+____________________        
+Othello for the 
+Commander X16 is a 
+modern adaptation 
+of the classic 
+strategy board game,
+tailored for the 
+retro charm of the 
+X16 platform.
+|ENDPAGE|
+|PAGE2|
+____________________
+Known for its simple
+yet strategic 
+gameplay, Othello 
+challenges players 
+to outmaneuver their
+opponent by flipping
+discs (stones) on 
+the playing board.
+|ENDPAGE|
+|PAGE3|
+____________________
+The objective is to 
+have the majority 
+of stones in your 
+color when the 
+board is filled.
+|ENDPAGE|
+#|PAGE4|
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#____________________
+#|ENDPAGE|

@@ -40,6 +40,7 @@ CHANNEL = 0
 ; Start the sound engine
 ;
 .proc _init_sound: near
+   lda #1                          ; assign rambank 0
    jsr zsmkit::zsm_init_engine     ; initialize engine
    jsr zsmkit::zsmkit_setisr
 

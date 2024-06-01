@@ -20,6 +20,8 @@
 
 #include "menu.h"
 
+uint8_t helppage = 0;
+
 /**
  * @brief Show game title screen
  * 
@@ -59,9 +61,85 @@ void game_title() {
             case 83:
                 gamestate = GAME_SETTINGS;
             return;
+            case 72:
+                gamestate = GAME_HELP;
+            return;
             case KEYCODE_RETURN:
                 gamestate = GAME_RUN;
                 init_game();
+            return;
+        }
+
+        // update sound buffer
+        sound_fill_buffers();
+        update_background_diagonal();
+    }
+}
+
+/**
+ * @brief Show help screen
+ * 
+ */
+void game_help() {
+    static unsigned char keycode;
+    uint8_t *ptr = (uint8_t*)(0xA000 + 240 * helppage);
+    uint8_t x,y;
+    uint32_t map_base_addr;
+    char buf[4] = {0x00, 0x00, 0x00, 0x00};
+
+    // set sprites
+    assign_sprite(1, TILE_NONE);
+    assign_sprite(2, TILE_NONE);
+    assign_sprite(3, TILE_NONE);
+    assign_sprite(4, TILE_NONE);
+
+    write_string("HELP", 0, 0);
+    write_string("(N) NEXT (P) PREV", 13, 0);
+    write_string("(ESC) BACK  PAGE:", 14, 0);
+
+    // print the page
+    asm("lda #2");
+    asm("sta $00");
+    for(y=1; y<12; y++) {
+        map_base_addr = MAPBASE1 + (y * MAPWIDTH) * 2;
+        VERA.address = map_base_addr;
+        VERA.address_hi = map_base_addr >> 16;
+        VERA.address_hi |= 0b10000;
+
+        for(x=0; x<20; x++) {
+            if(*ptr >= ' ' && *ptr <= '~') {
+                VERA.data0 = (*ptr) - 0x20 + 0x40;
+            } else {
+                VERA.data0 = 0x40;
+            }
+            VERA.data0 = 0x00;
+            ptr++;
+        }
+    }
+    asm("lda #0");
+    asm("sta $00");
+
+    // print page number
+    itoa(helppage+1, buf, 10);
+    write_string(buf, 14, 17);
+
+    while(1) {
+        asm("jsr $FFE4");
+        asm("sta %v", keycode);
+
+        switch(keycode) {
+            case KEYCODE_ESCAPE:
+                gamestate = GAME_MENU;
+            return;
+            case 78:
+                if(helppage < 3) {
+                    helppage++;
+                }
+            return;
+            case 80:
+                if(helppage > 0) {
+                    helppage--;
+                }
             return;
         }
 

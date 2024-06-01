@@ -27,6 +27,7 @@
 #include "menu.h"
 #include "mouse.h"
 #include "sound.h"
+#include "help.h"
 
 unsigned char keycode;
 
@@ -38,6 +39,9 @@ void main() {
     // load sound engine
     init_sound();
     start_bgmusic();
+
+    // load help assets
+    load_help_assets();
 
     // enable mouse
     init_mouse();
@@ -52,6 +56,11 @@ void main() {
         while(gamestate == GAME_SETTINGS) {
             clear_screen();
             game_settings();
+        }
+
+        while(gamestate == GAME_HELP) {
+            clear_screen();
+            game_help();
         }
 
         while(gamestate == GAME_RUN) {

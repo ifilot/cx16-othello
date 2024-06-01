@@ -4,8 +4,11 @@ PYTHON=python3
 
 make: OTHELLO.PRG
 
-OTHELLO.PRG: *.c *.h *.s FONTMAP.DAT TILES.DAT OTHELLO.ZSM TILE.ZSM
+OTHELLO.PRG: *.c *.h *.s FONTMAP.DAT TILES.DAT OTHELLO.ZSM TILE.ZSM HELP.DAT
 	$(CC) -O -o OTHELLO.PRG -t cx16 -C othello.cfg *.c *.s *.lib
+
+HELP.DAT: help.hlp
+	$(PYTHON) help.py
 
 TILES.DAT:
 	$(PYTHON) ../assets/scripts/convert_tilemap.py TILES.DAT

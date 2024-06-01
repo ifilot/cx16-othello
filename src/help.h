@@ -18,41 +18,9 @@
  *                                                                        *
  **************************************************************************/
 
-#ifndef _MENU_H
-#define _MENU_H
+#ifndef _HELP_H
+#define _HELP_H
 
-#include <cx16.h>
-#include <stdint.h>
+void __fastcall__ load_help_assets();
 
-#include "video.h"
-#include "game.h"
-#include "mouse.h"
-#include "sound.h"
-
-extern uint8_t helppage;
-
-/**
- * @brief Show game settings menu
- * 
- */
-void game_settings();
-
-/**
- * @brief Show game title screen
- * 
- */
-void game_title();
-
-/**
- * @brief Show help screen
- * 
- */
-void game_help();
-
-/**
- * @brief Print current game configuration to the screen
- * 
- */
-void print_choice();
-
-#endif // _MENU_H
+#endif // _HELP_H
