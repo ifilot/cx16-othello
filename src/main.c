@@ -46,7 +46,12 @@ void main() {
     while(1) {
         while(gamestate == GAME_MENU) {
             clear_screen();
-            game_menu();
+            game_title();
+        }
+
+        while(gamestate == GAME_SETTINGS) {
+            clear_screen();
+            game_settings();
         }
 
         while(gamestate == GAME_RUN) {

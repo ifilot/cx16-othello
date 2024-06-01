@@ -95,6 +95,7 @@
 #define GAME_STOP           0x00
 #define GAME_RUN            0x01
 #define GAME_MENU           0x02
+#define GAME_SETTINGS       0x03
 
 #define PLAYER_HUMAN        0x00
 #define PLAYER_CPU          0x01

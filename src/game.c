@@ -37,6 +37,7 @@ uint8_t board_offset_x = 6;
 uint8_t board_offset_y = 4;
 uint8_t no_move_counter = 0;
 uint16_t cpu_waittime = 200;
+uint8_t background_scroll = YES;
 
 /**
  * @brief Initialize the game scene

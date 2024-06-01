@@ -28,7 +28,7 @@
 .export _start_bgmusic
 .export _stop_bgmusic
 .export _rewind_bgmusic
-.export _sound_fill_buffers
+.export _sound_fill_buffers_asm
 .export _play_thumb
 
 TONE1 = 1189
@@ -55,11 +55,6 @@ CHANNEL = 0
 	ldy #>filename2   ; high byte
 	jsr zsmkit::zsm_setfile
 
-   ; set attenuation for background music
-	ldx #0			   ; priority
-	lda #$20		      ; attenuation value
-	jsr zsmkit::zsm_setatten
-
    rts
 .endproc
 
@@ -69,6 +64,12 @@ CHANNEL = 0
 .proc _start_bgmusic: near
 	ldx #0
 	jsr zsmkit::zsm_play
+
+   ; set attenuation for background music
+	ldx #0			   ; priority
+	lda #$20		      ; attenuation value
+	jsr zsmkit::zsm_setatten
+
 	rts
 .endproc
 
@@ -93,8 +94,9 @@ CHANNEL = 0
 ;
 ; Fill sound buffers
 ;
-.proc _sound_fill_buffers: near
-	jmp zsmkit::zsm_fill_buffers
+.proc _sound_fill_buffers_asm: near
+	jsr zsmkit::zsm_fill_buffers
+   rts
 .endproc
 
 ;

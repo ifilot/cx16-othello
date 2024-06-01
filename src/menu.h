@@ -30,10 +30,16 @@
 #include "sound.h"
 
 /**
- * @brief Show game menu
+ * @brief Show game settings menu
  * 
  */
-void game_menu();
+void game_settings();
+
+/**
+ * @brief Show game title screen
+ * 
+ */
+void game_title();
 
 /**
  * @brief Print current game configuration to the screen

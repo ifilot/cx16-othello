@@ -31,6 +31,7 @@
 #include "constants.h"
 #include "video.h"
 #include "sound.h"
+#include "sound_low.h"
 #include "mouse.h"
 
 extern uint8_t *board;              // store board configuration
@@ -50,6 +51,7 @@ extern uint8_t board_offset_x;      // board x-offset with respect to screen
 extern uint8_t board_offset_y;      // board y-offset with respect to screen
 extern uint8_t no_move_counter;     // how many turns in a row no move can be made
 extern uint16_t cpu_waittime;       // time to wait until the computer makes a move
+extern uint8_t background_scroll;   // whether or not to perform background scrolling
 
 /**
  * @brief Initialize the game scene
