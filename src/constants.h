@@ -43,8 +43,7 @@
 #define TILE_BLACK          0x03
 #define TILE_WHITE          0x04
 #define TILE_MOUSE_CURSOR   0x0F
-#define TILE_BLACK_CURSOR   0x13
-#define TILE_WHITE_CURSOR   0x14
+#define TILE_HIGHLIGHT      0x12
 
 // board offsets
 #define BOARD_WOOD          0x20
@@ -63,6 +62,7 @@
 // sprites
 #define SPRITE_MOUSE_CURSOR 0x00
 #define SPRITE_TILE_CURSOR  0x65
+#define SPRITE_HIGHLIGHT    0x66
 
 // stone colors
 #define STONE_RED           0x03
