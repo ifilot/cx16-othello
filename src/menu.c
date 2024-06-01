@@ -85,7 +85,7 @@ void game_help() {
     uint8_t *ptr = (uint8_t*)(0xA000 + 240 * helppage);
     uint8_t x,y;
     uint32_t map_base_addr;
-    char buf[4] = {0x00, 0x00, 0x00, 0x00};
+    char buf[4] = {0x00, '/', HELPPAGES+0x30, 0x00};
 
     // set sprites
     assign_sprite(1, TILE_NONE);
@@ -132,7 +132,7 @@ void game_help() {
                 gamestate = GAME_MENU;
             return;
             case 78:
-                if(helppage < 3) {
+                if(helppage < (HELPPAGES-1)) {
                     helppage++;
                 }
             return;

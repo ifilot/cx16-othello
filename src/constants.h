@@ -112,4 +112,6 @@
 #define SCROLL_BACKGROUND   1
 #define SCROLLSPEED         50
 
+#define HELPPAGES           6
+
 #endif // _CONSTANTS_H
